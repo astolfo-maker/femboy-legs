@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Telegram Tap Game</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            text-align: center;
+        }
+        #tapButton {
+            font-size: 2em;
+            padding: 20px 40px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        #tapButton:hover {
+            background-color: #3e8e41;
+        }
+        #score {
+            font-size: 1.5em;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Tap Game</h1>
+    <button id="tapButton">Tap Me!</button>
+    <div id="score">Score: 0</div>
+
+    <script>
+        const tg = window.Telegram.WebApp;
+
+        let score = parseInt(localStorage.getItem('tapScore') || '0');
+        const tapButton = document.getElementById('tapButton');
+        const scoreDisplay = document.getElementById('score');
+
+        // Используем обратные кавычки для шаблонной строки
+        scoreDisplay.textContent = `Score: ${score}`;
+
+        tapButton.addEventListener('click', () => {
+            score++;
+            scoreDisplay.textContent = `Score: ${score}`;
+            localStorage.setItem('tapScore', score.toString());
+        });
+
+        tg.onEvent('mainButtonClicked', function(){
+          tg.sendData("Score: " + score);
+        });
+
+        tg.ready();
+        tg.expand();
+        tg.MainButton.setText("Share Score");
+        tg.MainButton.show();
+
+    </script>
+</body>
+</html>
